@@ -174,7 +174,9 @@ namespace ServiceStack.Authentication.IdentityServer.Providers
                 return false;
             }
 
-            if (httpRequest.AbsoluteUri.IndexOf(CallbackUrl, 0, StringComparison.OrdinalIgnoreCase) < 0)
+            // Doesn't work with SSL offloading
+            var callbackUrlToCheck = new Uri(CallbackUrl);
+            if (httpRequest.AbsoluteUri.IndexOf(callbackUrlToCheck.ToString().Substring(callbackUrlToCheck.Scheme.Length + 3), 0, StringComparison.OrdinalIgnoreCase) < 0)
             {
                 return false;
             }
@@ -196,7 +198,9 @@ namespace ServiceStack.Authentication.IdentityServer.Providers
                 return false;
             }
 
-            if (httpRequest.AbsoluteUri.IndexOf(CallbackUrl, StringComparison.OrdinalIgnoreCase) != 0)
+            // Doesn't work with SSL offloading
+            var callbackUrlToCheck = new Uri(CallbackUrl);
+            if (httpRequest.AbsoluteUri.IndexOf(callbackUrlToCheck.ToString().Substring(callbackUrlToCheck.Scheme.Length + 3), StringComparison.OrdinalIgnoreCase) != 0)
             {
                 return false;
             }
