@@ -200,7 +200,12 @@ namespace ServiceStack.Authentication.IdentityServer.Providers
 
             // Doesn't work with SSL offloading
             var callbackUrlToCheck = new Uri(CallbackUrl);
-            if (httpRequest.AbsoluteUri.IndexOf(callbackUrlToCheck.ToString().Substring(callbackUrlToCheck.Scheme.Length + 3), StringComparison.OrdinalIgnoreCase) != 0)
+            var callbackUrlWithoutProtocol =
+                callbackUrlToCheck.ToString().Substring(callbackUrlToCheck.Scheme.Length + 3);
+            var absoluteUriToCheck = new Uri(httpRequest.AbsoluteUri);
+            var absoluteUriWithoutProtocol = absoluteUriToCheck.ToString().Substring(absoluteUriToCheck.Scheme.Length + 3); 
+            
+            if (absoluteUriWithoutProtocol.IndexOf(callbackUrlWithoutProtocol, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 return false;
             }
